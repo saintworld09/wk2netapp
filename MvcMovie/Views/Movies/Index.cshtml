@@ -1,0 +1,109 @@
+@model IEnumerable<MvcMovie.Models.Movie>
+
+@{
+    ViewData["Title"] = "My Movies";
+    var years = ViewData["Years"] as List<int> ?? new List<int>();
+    var selectedYear = ViewData["SelectedYear"] as int?;
+}
+
+<h1>My Movies</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+
+<form asp-controller="Movies" asp-action="Index" method="get">
+    <div class="row g-3 align-items-end mb-4">
+
+        <div class="col-md-4">
+            <label for="searchString" class="form-label">Title</label>
+            <input type="text"
+                   id="searchString"
+                   name="searchString"
+                   value="@Context.Request.Query["searchString"]"
+                   class="form-control"
+                   placeholder="Search by title" />
+        </div>
+
+        <div class="col-md-3">
+            <label for="selectedYear" class="form-label">Year or Newer</label>
+            <select id="selectedYear"
+                    name="selectedYear"
+                    class="form-select">
+
+                <option value="">All Years</option>
+
+                @foreach (var year in years)
+                {
+                    if (selectedYear == year)
+                    {
+                        <option value="@year" selected>@year</option>
+                    }
+                    else
+                    {
+                        <option value="@year">@year</option>
+                    }
+                }
+            </select>
+        </div>
+
+        <div class="col-md-2">
+            <button type="submit" class="btn btn-primary">
+                Filter
+            </button>
+        </div>
+
+    </div>
+</form>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ReleaseDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Genre)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Price)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Rating)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Title)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ReleaseDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Genre)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Price)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Rating)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+

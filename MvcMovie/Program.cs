@@ -12,6 +12,13 @@ builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
 
+// Initialize the database with seed data
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    SeedData.Initialize(services);
+}
+
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
